@@ -17,13 +17,40 @@ This Go package provides a map that automatically removes entries after a given 
 
 ### Methods
 
-* New - creates a new Map
-* Get, Set, Delete - standard map operations
-* Len - returns the number of entries in the map
-* Iterate - iterates over all entries in the map
-* Clear - removes all entries from the map
-* Stop - stops the background goroutine that removes expired entries
+* `New` - creates a new `Map`
+* `Get`, `Set`, `Delete` - standard map operations
+* `Len` - returns the number of entries in the map
+* `Iterate` - iterates over all entries in the map
+* `Clear` - removes all entries from the map
+* `Stop` - stops the background goroutine that removes expired entries
 
 ### Example
 
-See [example/simple/simple.go](./example/simple/simple.go)
+```go
+package main
+
+import (
+        "fmt"
+        "time"
+
+        "github.com/TheoBrigitte/expirymap"
+)
+
+func main() {
+        // Define a key and a value.
+        key := 1
+        value := []string{"foo", "bar", "baz"}
+
+        // Create a new map[int]string with an expiry delay of 1ns and a garbage collection interval of 1ms.
+        m := expirymap.New[int, []string](time.Nanosecond, time.Millisecond)
+        defer m.Stop()
+
+        // Set 1=[foo bar baz] in the map.
+        m.Set(key, value)
+
+        fmt.Println(m.Get(1))            // [foo bar baz]
+        time.Sleep(time.Millisecond * 2) // Wait for the entry to expire.
+        fmt.Println(m.Get(1))            // []
+}
+```
+source [example/simple/simple.go](./example/simple/simple.go)
