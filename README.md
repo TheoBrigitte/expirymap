@@ -20,4 +20,4 @@ This Go package provides a map that automatically removes entries after a given 
 
 ## Example
 
-See [example/main.go](./example/main.go)
+See [example/simple/simple.go](./example/simple/simple.go)
