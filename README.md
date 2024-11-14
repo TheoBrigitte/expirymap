@@ -17,7 +17,7 @@ This Go package provides a map that automatically removes entries after a given 
 
 ### Methods
 
-* NewExpiryMap - creates a new ExpiryMap
+* New - creates a new Map
 * Get, Set, Delete - standard map operations
 * Len - returns the number of entries in the map
 * Iterate - iterates over all entries in the map

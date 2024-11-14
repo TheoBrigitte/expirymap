@@ -6,9 +6,9 @@ import (
 	"time"
 )
 
-// ExpiryMap is a map of K key and V values with a builtin garbage cleaner that automatically
+// Map is a map of K key and V values with a builtin garbage cleaner that automatically
 // deletes entries after a given expiry delay.
-type ExpiryMap[K comparable, V any] struct {
+type Map[K comparable, V any] struct {
 	storedMap            map[K]*Content[V]
 	expiryDelay          time.Duration
 	gargabeCleanInterval time.Duration
@@ -26,8 +26,8 @@ type Content[V any] struct {
 // New returns a new ExpiryMap.
 // It also starts a goroutine that periodically cleans up expired entries
 // according to the expiryDelay every gargabeCleanInterval.
-func New[K comparable, V any](expiryDelay, gargabeCleanInterval time.Duration) *ExpiryMap[K, V] {
-	s := &ExpiryMap[K, V]{
+func New[K comparable, V any](expiryDelay, gargabeCleanInterval time.Duration) *Map[K, V] {
+	s := &Map[K, V]{
 		storedMap:            make(map[K]*Content[V]),
 		expiryDelay:          expiryDelay,
 		gargabeCleanInterval: gargabeCleanInterval,
@@ -40,7 +40,7 @@ func New[K comparable, V any](expiryDelay, gargabeCleanInterval time.Duration) *
 }
 
 // Get returns the value for a given key.
-func (s *ExpiryMap[K, V]) Get(key K) (V, bool) {
+func (s *Map[K, V]) Get(key K) (V, bool) {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 
@@ -54,7 +54,7 @@ func (s *ExpiryMap[K, V]) Get(key K) (V, bool) {
 }
 
 // Set sets the value for a given key and reset its expiry time.
-func (s *ExpiryMap[K, V]) Set(key K, data V) {
+func (s *Map[K, V]) Set(key K, data V) {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 
@@ -65,7 +65,7 @@ func (s *ExpiryMap[K, V]) Set(key K, data V) {
 }
 
 // Delete deletes the value for a given key.
-func (s *ExpiryMap[K, V]) Delete(key K) {
+func (s *Map[K, V]) Delete(key K) {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 
@@ -73,7 +73,7 @@ func (s *ExpiryMap[K, V]) Delete(key K) {
 }
 
 // Len returns the number of stored entries.
-func (s *ExpiryMap[K, V]) Len() int {
+func (s *Map[K, V]) Len() int {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 
@@ -81,7 +81,7 @@ func (s *ExpiryMap[K, V]) Len() int {
 }
 
 // Iterate returns an iterator to loop over the stored entries.
-func (s *ExpiryMap[K, V]) Iterate() iter.Seq2[K, V] {
+func (s *Map[K, V]) Iterate() iter.Seq2[K, V] {
 	return func(next func(K, V) bool) {
 		s.mutex.Lock()
 		defer s.mutex.Unlock()
@@ -95,7 +95,7 @@ func (s *ExpiryMap[K, V]) Iterate() iter.Seq2[K, V] {
 }
 
 // Clear deletes all stored entries.
-func (s *ExpiryMap[K, V]) Clear() {
+func (s *Map[K, V]) Clear() {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 
@@ -103,14 +103,14 @@ func (s *ExpiryMap[K, V]) Clear() {
 }
 
 // Stop stops the garbage cleaner goroutine.
-func (s *ExpiryMap[K, V]) Stop() {
+func (s *Map[K, V]) Stop() {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 
 	s.stop <- true
 }
 
-func (s *ExpiryMap[K, V]) start() {
+func (s *Map[K, V]) start() {
 	go func() {
 		for {
 			select {
@@ -123,7 +123,7 @@ func (s *ExpiryMap[K, V]) start() {
 	}()
 }
 
-func (s *ExpiryMap[K, V]) gargabeClean() {
+func (s *Map[K, V]) gargabeClean() {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 
