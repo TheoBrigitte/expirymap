@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://pkg.go.dev/github.com/TheoBrigitte/expirymap"><img src="https://pkg.go.dev/badge/github.com/TheoBrigitte/expirymap.svg" alt="Go Reference"></a>
-  <a href="https://github.com/TheoBrigitte/expirymap/actions/workflows/test.yml"><img src="https://github.com/TheoBrigitte/expirymap/actions/workflows/test.yml/badge.svg" alt="Github action"></a>
+  <a href="https://github.com/TheoBrigitte/expirymap/actions/workflows/test.yaml"><img src="https://github.com/TheoBrigitte/expirymap/actions/workflows/test.yaml/badge.svg" alt="Github action"></a>
   <a href="github.com/TheoBrigitte/expirymap/releases"><img src="https://img.shields.io/github/release/TheoBrigitte/expirymap.svg" alt="Latest Release"></a>
 </p>
 
