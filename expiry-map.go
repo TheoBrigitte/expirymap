@@ -40,16 +40,17 @@ func New[K comparable, V any](expiryDelay, gargabeCleanInterval time.Duration) *
 }
 
 // Get returns the value for a given key.
-func (s *ExpiryMap[K, V]) Get(key K) V {
+func (s *ExpiryMap[K, V]) Get(key K) (V, bool) {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 
 	content, found := s.storedMap[key]
+
 	if !found {
 		content = &Content[V]{}
 	}
 
-	return content.Data
+	return content.Data, found
 }
 
 // Set sets the value for a given key and reset its expiry time.

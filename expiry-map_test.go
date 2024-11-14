@@ -18,8 +18,13 @@ func TestGetUnset(t *testing.T) {
 
 	m := New[int, string](time.Minute, time.Minute)
 
-	if v := m.Get(key); !reflect.DeepEqual(v, "") {
+	v, found := m.Get(key)
+	if !reflect.DeepEqual(v, "") {
 		t.Fatalf("expected %v, got %v", "", v)
+	}
+
+	if found {
+		t.Fatalf("expected %v, got %v", false, found)
 	}
 }
 
@@ -30,7 +35,7 @@ func TestSetGet(t *testing.T) {
 	m := New[int, string](time.Minute, time.Minute)
 	m.Set(key, value)
 
-	if v := m.Get(key); !reflect.DeepEqual(v, value) {
+	if v, _ := m.Get(key); !reflect.DeepEqual(v, value) {
 		t.Fatalf("expected %v, got %v", value, v)
 	}
 }
@@ -43,7 +48,7 @@ func TestSetDeleteGet(t *testing.T) {
 	m.Set(key, value)
 	m.Delete(key)
 
-	if v := m.Get(key); !reflect.DeepEqual(v, "") {
+	if v, _ := m.Get(key); !reflect.DeepEqual(v, "") {
 		t.Fatalf("expected %v, got %v", "", v)
 	}
 }
@@ -124,13 +129,13 @@ func TestGargabeClean(t *testing.T) {
 	m := New[int, string](time.Nanosecond, time.Millisecond)
 	m.Set(key, value)
 
-	if v := m.Get(key); !reflect.DeepEqual(v, value) {
+	if v, _ := m.Get(key); !reflect.DeepEqual(v, value) {
 		t.Fatalf("expected %v, got %v", value, v)
 	}
 
 	time.Sleep(time.Millisecond * 2)
 
-	if v := m.Get(key); v != "" {
+	if v, _ := m.Get(key); v != "" {
 		t.Fatalf("expected nil, got %v", v)
 	}
 }
