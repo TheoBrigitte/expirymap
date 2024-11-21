@@ -104,9 +104,6 @@ func (s *Map[K, V]) Clear() {
 
 // Stop stops the garbage cleaner goroutine.
 func (s *Map[K, V]) Stop() {
-	s.mutex.Lock()
-	defer s.mutex.Unlock()
-
 	s.stop <- true
 }
 
