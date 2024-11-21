@@ -12,7 +12,8 @@ func main() {
 	key := 1
 	value := []string{"foo", "bar", "baz"}
 
-	// Create a new map[int]string with an expiry delay of 1ns and a garbage collection interval of 1ms.
+	// Create a new expiry map of type map[int][]string
+	// with an expiry delay of 1ns and a garbage collection interval of 1ms.
 	m := expirymap.New[int, []string](time.Nanosecond, time.Millisecond)
 	defer m.Stop()
 
